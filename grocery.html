@@ -1,0 +1,410 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>FreshBasket - Grocery Delivery</title>
+<style>
+  /* Reset and base */
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #f9f9f9;
+    color: #333;
+    line-height: 1.5;
+    min-height: 100vh;
+  }
+  a {
+    text-decoration: none;
+    color: inherit;
+  }
+  /* Fixed header with z-index */
+  header.site-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: #27ae60;
+    color: white;
+    padding: 1rem 1.5rem;
+    font-weight: 900;
+    font-size: 1.5rem;
+    letter-spacing: 1.1px;
+    z-index: 1000;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    user-select:none;
+    box-shadow: 0 2px 8px rgb(0 0 0 / 0.15);
+  }
+  header.site-header a {
+    color: white;
+    font-weight: 700;
+    font-size: 1rem;
+    padding: 0.4rem 0.8rem;
+    border-radius: 24px;
+    background: rgba(255 255 255 / 0.2);
+    transition: background-color 0.3s ease;
+  }
+  header.site-header a:hover,
+  header.site-header a:focus {
+    background-color: rgba(255 255 255 / 0.4);
+    outline: none;
+  }
+
+  /* Wrapper container for center and max width, with padding top for header */
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 5.5rem 1.5rem 3rem 1.5rem; /* top padding for fixed header space */
+  }
+
+  /* Hero Section */
+  header.hero {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+  header.hero img {
+    width: 100%;
+    max-height: 360px;
+    object-fit: cover;
+    border-radius: 16px;
+    box-shadow: 0 6px 18px rgb(0 0 0 / 0.12);
+    margin-bottom: 1.5rem;
+  }
+  header.hero h1 {
+    font-size: 3rem;
+    font-weight: 900;
+    color: #27ae60;
+    margin-bottom: 0.3rem;
+    letter-spacing: 1.1px;
+  }
+  header.hero p.subtitle {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #555;
+    margin-bottom: 1.6rem;
+  }
+
+  /* CTA Button */
+  .btn-primary {
+    display: inline-block;
+    background: #27ae60;
+    color: white;
+    font-weight: 700;
+    padding: 1rem 2.5rem;
+    border-radius: 36px;
+    font-size: 1.25rem;
+    box-shadow: 0 6px 22px rgb(39 174 96 / 0.6);
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    user-select: none;
+  }
+  .btn-primary:hover,
+  .btn-primary:focus {
+    background-color: #219150;
+    box-shadow: 0 8px 30px rgb(33 145 80 / 0.8);
+    outline: none;
+  }
+
+  /* Features Section */
+  .features {
+    display: grid;
+    grid-template-columns: repeat(auto-fit,minmax(280px,1fr));
+    gap: 1.8rem;
+    margin-bottom: 3rem;
+  }
+  .feature-item {
+    background: white;
+    border-radius: 15px;
+    padding: 1.6rem 1.8rem;
+    box-shadow: 0 4px 14px rgb(0 0 0 / 0.07);
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    transition: box-shadow 0.25s ease;
+  }
+  .feature-item:hover {
+    box-shadow: 0 6px 20px rgb(0 0 0 / 0.12);
+  }
+  .feature-icon {
+    font-size: 2.2rem;
+    color: #27ae60;
+    flex-shrink: 0;
+    margin-top: 0.1rem;
+  }
+  .feature-text strong {
+    font-weight: 700;
+    color: #27ae60;
+  }
+  .feature-text {
+    font-size: 1.05rem;
+    color: #444;
+  }
+
+  /* How it Works Section */
+  .how-it-works {
+    background: #e6f4eb;
+    border-radius: 16px;
+    padding: 2rem 2rem 2.5rem 2rem;
+    margin-bottom: 3rem;
+  }
+  .how-it-works h2 {
+    text-align: center;
+    font-size: 2rem;
+    font-weight: 800;
+    margin-bottom: 1.2rem;
+    color: #27ae60;
+  }
+  .steps {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    gap: 1.8rem;
+  }
+  .step {
+    max-width: 240px;
+    background: white;
+    border-radius: 14px;
+    padding: 1.6rem 1.4rem;
+    box-shadow: 0 4px 14px rgb(0 0 0 / 0.08);
+    text-align: center;
+    user-select:none;
+    transition: transform 0.3s ease;
+  }
+  .step:hover {
+    transform: translateY(-5px);
+  }
+  .step-icon {
+    font-size: 3rem;
+    color: #27ae60;
+    margin-bottom: 0.8rem;
+  }
+  .step-title {
+    font-weight: 700;
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+    color: #219150;
+  }
+  .step-desc {
+    font-size: 1rem;
+    color: #565656;
+    line-height: 1.4;
+  }
+
+  /* Why Choose Us Section */
+  .why-choose {
+    margin-bottom: 3rem;
+  }
+  .why-choose h2 {
+    font-size: 2rem;
+    font-weight: 800;
+    margin-bottom: 1.2rem;
+    color: #27ae60;
+    text-align: center;
+  }
+  .why-list {
+    max-width: 720px;
+    margin: 0 auto;
+    font-size: 1.1rem;
+    color: #444;
+    list-style: disc inside;
+    line-height: 1.6;
+  }
+  .why-list li {
+    margin-bottom: 0.9rem;
+  }
+
+  /* Testimonials Section */
+  .testimonials {
+    background: #f1faf4;
+    border-radius: 16px;
+    padding: 2rem 2rem 2.5rem 2rem;
+  }
+  .testimonials h2 {
+    font-size: 2rem;
+    font-weight: 800;
+    margin-bottom: 1.5rem;
+    color: #27ae60;
+    text-align: center;
+  }
+  .testimonial-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.6rem;
+    justify-content: center;
+  }
+  .testimonial {
+    background: white;
+    border-radius: 14px;
+    max-width: 300px;
+    padding: 1.7rem 1.7rem 1.8rem 1.7rem;
+    box-shadow: 0 4px 14px rgb(0 0 0 / 0.07);
+    font-style: italic;
+    color: #555;
+    position: relative;
+  }
+  .testimonial::before {
+    content: '“';
+    font-size: 3rem;
+    color: #27ae60;
+    position: absolute;
+    top: 0.3rem;
+    left: 1rem;
+    font-style: normal;
+  }
+  .testimonial::after {
+    content: '”';
+    font-size: 3rem;
+    color: #27ae60;
+    position: absolute;
+    bottom: 0.3rem;
+    right: 1rem;
+    font-style: normal;
+  }
+  .testimonial-author {
+    margin-top: 1.1rem;
+    font-weight: 700;
+    font-style: normal;
+    font-size: 0.95rem;
+    color: #27ae60;
+    text-align: right;
+  }
+
+  /* Footer */
+  footer {
+    text-align: center;
+    font-size: 0.9rem;
+    color: #888;
+    margin-top: 3.5rem;
+    padding-bottom: 1rem;
+    user-select:none;
+  }
+
+  /* Responsive */
+  @media (max-width: 620px) {
+    .steps {
+      flex-direction: column;
+      align-items: center;
+    }
+    .feature-item {
+      flex-direction: row;
+    }
+  }
+
+  @media (max-width: 400px) {
+    header.hero h1 {
+      font-size: 2.5rem;
+    }
+    header.hero p.subtitle {
+      font-size: 1.1rem;
+    }
+    .btn-primary {
+      font-size: 1rem;
+      padding: 0.9rem 2rem;
+    }
+    .feature-text {
+      font-size: 0.95rem;
+    }
+    .step-title {
+      font-size: 1.1rem;
+    }
+  }
+</style>
+</head>
+<body>
+  <header class="site-header" role="banner">
+    <div>FreshBasket</div>
+    <nav>
+      <a href="#order" tabindex="0">Order Now</a>
+    </nav>
+  </header>
+
+  <div class="container" role="main">
+    <header class="hero">
+      <img src="https://images.pexels.com/photos/96974/pexels-photo-96974.jpeg?auto=compress&cs=tinysrgb&h=600" alt="Fresh fruits and vegetables in basket" />
+      <h1>FreshBasket</h1>
+      <p class="subtitle">Your groceries delivered fresh and fast — right to your doorstep.</p>
+      <a href="#order" class="btn-primary" role="button" tabindex="0">Order Now</a>
+    </header>
+
+    <section class="features" aria-label="Service Features">
+      <article class="feature-item">
+        <span class="feature-icon" aria-hidden="true">🛒</span>
+        <p class="feature-text"><strong>Wide Selection:</strong> Choose from thousands of products including fresh produce, dairy, bakery, and household essentials.</p>
+      </article>
+      <article class="feature-item">
+        <span class="feature-icon" aria-hidden="true">🚚</span>
+        <p class="feature-text"><strong>Fast Delivery:</strong> Get your groceries delivered in as little as 1 hour with real-time tracking.</p>
+      </article>
+      <article class="feature-item">
+        <span class="feature-icon" aria-hidden="true">💳</span>
+        <p class="feature-text"><strong>Secure Payments:</strong> Multiple payment options with secure checkout and 24/7 customer support.</p>
+      </article>
+      <article class="feature-item">
+        <span class="feature-icon" aria-hidden="true">📦</span>
+        <p class="feature-text"><strong>Fresh Guarantee:</strong> Our quality promise ensures you get only fresh, high-quality products or your money back.</p>
+      </article>
+    </section>
+
+    <section class="how-it-works" aria-labelledby="howitworks-title">
+      <h2 id="howitworks-title">How It Works</h2>
+      <div class="steps">
+        <div class="step">
+          <div class="step-icon" aria-hidden="true">🔍</div>
+          <div class="step-title">Browse & Select</div>
+          <div class="step-desc">Explore a vast selection of groceries from fresh fruits to pantry staples. Add what you need to your cart with ease.</div>
+        </div>
+        <div class="step">
+          <div class="step-icon" aria-hidden="true">🛒</div>
+          <div class="step-title">Place Your Order</div>
+          <div class="step-desc">Checkout with secure payment options. Choose delivery time that fits your schedule.</div>
+        </div>
+        <div class="step">
+          <div class="step-icon" aria-hidden="true">🚚</div>
+          <div class="step-title">Fast Delivery</div>
+          <div class="step-desc">Our drivers bring your groceries right to your doorstep, fresh and on time.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="why-choose" aria-labelledby="why-choose-title">
+      <h2 id="why-choose-title">Why Choose FreshBasket?</h2>
+      <ul class="why-list">
+        <li><strong>Quality You Can Trust:</strong> We source directly from local farmers and trusted suppliers, ensuring fresh and organic products.</li>
+        <li><strong>Eco-friendly Packaging:</strong> Sustainable packaging options to reduce waste and care for the planet.</li>
+        <li><strong>Customer Satisfaction:</strong> Dedicated support team available 24/7 ready to address your needs and concerns.</li>
+        <li><strong>Exclusive Offers:</strong> Frequent discounts, loyalty rewards, and personalized deals just for you.</li>
+      </ul>
+    </section>
+
+    <section class="testimonials" aria-labelledby="testimonials-title">
+      <h2 id="testimonials-title">What Our Customers Say</h2>
+      <div class="testimonial-list">
+        <blockquote class="testimonial">
+          FreshBasket saved me so much time! The produce is always fresh, and delivery is super fast and reliable.
+          <div class="testimonial-author">- Sarah L.</div>
+        </blockquote>
+        <blockquote class="testimonial">
+          Love the easy ordering process and the friendly customer service team. Highly recommend it to busy families!
+          <div class="testimonial-author">- David P.</div>
+        </blockquote>
+        <blockquote class="testimonial">
+          Great variety and prices, plus the fresh guarantee gave me confidence to switch to online grocery shopping.
+          <div class="testimonial-author">- Anjali R.</div>
+        </blockquote>
+      </div>
+    </section>
+
+    <footer>
+      &copy; 2024 FreshBasket. All rights reserved.
+    </footer>
+  </div>
+</body>
+</html>
